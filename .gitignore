@@ -1,0 +1,15 @@
+/.gradle/
+/.idea/
+/gradle/
+/JSON Database/task/build/
+/JSON Database/task/out/
+/JSON Database/100-cell database/
+/JSON Database/Complex keys/
+/JSON Database/Hello, JSON/
+/JSON Database/Multithreaded server/
+/JSON Database/Network connection/
+/JSON Database/Simple online database/
+
+**.yaml
+**.class
+
