@@ -23,4 +23,14 @@ public class FileUtil {
         File file = new File(path + File.separator + fileName);
         return file.length() > 0;
     }
+
+    public static String getAsString(String path, String dbFile) throws IOException {
+        File file = new File(path + File.separator + dbFile);
+        return Files.readString(file.toPath());
+    }
+
+    public static void saveToFile(String path, String dbFile, String content) throws IOException {
+        File file = new File(path + File.separator + dbFile);
+        Files.writeString(file.toPath(), content);
+    }
 }

@@ -11,4 +11,7 @@ public class Args {
 
     @Parameter(names="-v")
     protected String value;
+
+    @Parameter(names="-in")
+    protected String fileName;
 }

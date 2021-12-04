@@ -3,9 +3,11 @@ package client;
 import com.beust.jcommander.JCommander;
 import com.google.gson.Gson;
 import model.Request;
+import server.FileUtil;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -16,7 +18,10 @@ import java.util.Scanner;
 public class Main {
     private static final int PORT = 23456;
     private static final String ADDRESS = "127.0.0.1";
-
+    protected static final String PATH = "D:" + File.separator + "sul"  + File.separator + "java" + File.separator +
+            "JSON Database" + File.separator + "JSON Database" + File.separator + "task" +
+    File.separator + "src" + File.separator + "client" + File.separator + "data";
+   // protected static final String PATH = "D:" + File.separator + "sul"  + File.separator + "data";
 
 
     public static void main(String[] args) {
@@ -35,10 +40,20 @@ public class Main {
                 .build()
                 .parse(argv);
 
-        Request request = new Request(args.type, args.key, args.value);
-        Gson gson = new Gson();
+        String response = "";
+        if (args.fileName == null) {
+            Request request = new Request(args.type, args.key, args.value);
+            Gson gson = new Gson();
+            response = gson.toJson(request);
+        } else {
+            try {
+                response = FileUtil.getAsString(PATH, args.fileName);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
-       return gson.toJson(request);
+       return response;
     }
 
     private static String doRequest(String query) {

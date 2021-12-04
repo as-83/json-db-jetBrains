@@ -9,7 +9,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
-import java.nio.file.Files;
+
 
 public class ClientHandler implements Runnable {
     private final Socket clientSocket;
@@ -27,9 +27,7 @@ public class ClientHandler implements Runnable {
             String requestStr = input.readUTF();
             Gson gson = new Gson();
             Request request = gson.fromJson(requestStr, Request.class);
-            if (request.getType().equals("exit")) {
-                Main.stopServer();
-            }
+
             Response response = execute(request);
             String json = gson.toJson(response);
             output.writeUTF(json);
@@ -44,14 +42,17 @@ public class ClientHandler implements Runnable {
     private static Response execute(Request request) {
         Response response = new Response();
         DB db = DB.getInstance();
-        response.setResponse("ERROR");
-        String key = request.getKey();
+        String key = "";
+        if ( request.getKey() != null) {
+            key = request.getKey();
+        }
         switch (request.getType()) {
             case "get":
                 if (db.containsKey(key)) {
                     response.setResponse("OK");
                     response.setValue(db.get(key));
                 } else {
+                    response.setResponse("ERROR");
                     response.setReason("No such key");
                 }
                 break;
@@ -66,6 +67,12 @@ public class ClientHandler implements Runnable {
                 } else {
                     response.setReason("No such key");
                 }
+                break;
+            case "exit":
+                Main.stopServer();
+                response.setResponse("OK");
+                break;
+            default:
                 break;
 
         }
